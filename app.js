@@ -12,12 +12,13 @@ const server = http.createServer(app);
 const io = require('socket.io')(server);
 const database = require('./server/models/db');
 const route_manager = require('./server/routes/route_manager');
+const fleetManagement = require('./server/scripts/utils/fleet_management/fleet_management');
 const config = require('./server/config');
 
 config();
 
 
-
+fleetManagement.fleetManagement();
 
 server.listen(process.env.APP_PORT || 8000, ()=> {
     console.log("SocketIO module is started successfully!");
