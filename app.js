@@ -11,11 +11,14 @@ app.use(cors({
 const server = http.createServer(app);
 const io = require('socket.io')(server);
 const database = require('./server/models/db');
-
 const route_manager = require('./server/routes/route_manager');
+const config = require('./server/config');
 
-// route_manager.socketIOController(io);
+config();
 
-server.listen(8000, ()=> {
+
+
+
+server.listen(process.env.APP_PORT || 8000, ()=> {
     console.log("SocketIO module is started successfully!");
 });
