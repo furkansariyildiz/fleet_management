@@ -1,0 +1,45 @@
+{
+  "name": "fleet_management",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/furkansariyildiz/fleet_management.git"
+  },
+  "author": "furkan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/furkansariyildiz/fleet_management/issues"
+  },
+  "homepage": "https://github.com/furkansariyildiz/fleet_management#readme",
+  "dependencies": {
+    "bluebird": "^3.7.2",
+    "body-parser": "^1.19.1",
+    "cors": "^2.8.5",
+    "createjs-module": "^0.8.3",
+    "dotenv": "^16.0.0",
+    "ejs": "^3.1.6",
+    "express": "^4.17.2",
+    "helmet": "^5.0.2",
+    "http-status": "^1.5.0",
+    "joi": "^17.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb": "^4.8.1",
+    "mongoose": "^6.2.1",
+    "node-fetch": "^3.2.0",
+    "npm-watch": "^0.11.0",
+    "react-nav2djs": "0.0.3",
+    "react-ros2djs": "0.0.1",
+    "roslib": "^1.2.0",
+    "rosnodejs": "^3.0.2",
+    "socket.io": "^4.4.1",
+    "winston": "^3.6.0",
+    "ws": "^8.7.0",
+    "xlsx": "^0.18.5"
+}
+
+}
