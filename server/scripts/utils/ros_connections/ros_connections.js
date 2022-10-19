@@ -9,6 +9,7 @@ config();
 
 var rosbridge_topics = [];
 
+let ros_list = [];
 let ros_list_for_reconnect = [];
 
 let ros_shutdown_condition = {};
@@ -18,6 +19,9 @@ let ros_shutdown_condition = {};
 async function listRosConnections(){
     var filter = {};
     var robots = await findRobots.findRobots(filter);
+    for(var i=0; i<robots.length; i++){
+        var ros = rosInit(robots[i].url);
+    };
 };
 
 async function rosInit(url){
@@ -51,6 +55,15 @@ async function rosInit(url){
         }else{
             ros_shutdown_condition[ros.socket._url] = false;
         };
+    });
+
+    ros.on('error', async function(message){
+        ros.close();
+        rosReconnect(undefined, ros);
+    });
+
+    ros.on('shutdown', async function(message){
+        console.log(message);
     })
 }
 
