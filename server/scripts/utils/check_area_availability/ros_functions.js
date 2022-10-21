@@ -1,4 +1,6 @@
 const ROSLIB = require('roslib');
+const checkAreaAvailability = require('./check_area_availability');
+
 
 function generateTopics(ros){
             
@@ -22,10 +24,11 @@ function generateServices(ros){
 
 function advertiseCheckAreaAvailability(client){
     client.advertise(function(req, res){
-        console.log("Request from service: ", req);
+        checkAreaAvailability.checkAreaAvailability(req.area_availability.area_name.data);
         res.response = "OK";
         return true;
     });
+    return true;
 };
 
 module.exports = {
