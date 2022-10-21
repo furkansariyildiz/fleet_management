@@ -22,6 +22,8 @@ config();
 startUp.resetAllRobots();
 fleetManagement.fleetManagement();
 
+route_manager.socketIORouteManager(io);
+
 server.listen(process.env.APP_PORT || 8000, ()=> {
     console.log("SocketIO module is started successfully!");
 });
