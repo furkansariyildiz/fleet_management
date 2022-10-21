@@ -1,7 +1,7 @@
 const ROSLIB = require('roslib');
 const rosReconnect = require('./ros_reconnect');
 const rosbridgeRosFunctions = require('../ros_bridge/ros_functions');
-const fleetManagementRosFunctions = require('../fleet_management/ros_functions');
+const CheckAreaAvailabilityRosFunctions = require('../check_area_availability/ros_functions');
 const arrayFunctions = require('../array_functions/array_functions');
 const config = require('../../../config');
 
@@ -10,11 +10,11 @@ config();
 
 //Topics
 var rosbridge_topics = [];
-var fleet_management_topics = [];
+var check_area_availability_topics = [];
 
 //Services
 var rosbridge_services = [];
-var fleet_management_services = [];
+var check_area_availability_services = [];
 
 
 //variables
@@ -34,7 +34,7 @@ async function rosInit(url){
 
         //Services as JSON
         var rosbridge_service = {};
-        var fleet_management_service = {};
+        var check_area_availability_service = {};
 
         rosReconnect.rosReconnect(undefined, ros);
         
@@ -42,13 +42,13 @@ async function rosInit(url){
         rosbridge_topic[robot_url] = rosbridgeRosFunctions.generateTopics(ros);
 
         //Generate Services
-        fleet_management_service[robot_url] = fleetManagementRosFunctions.generateServices(ros);
+        check_area_availability_service[robot_url] = CheckAreaAvailabilityRosFunctions.generateServices(ros);
 
         //Pushing topic to belongs topics
         rosbridge_topics.push(rosbridge_topic);
 
         //Pushing service to belongs services
-        fleet_management_services.push(fleet_management_service);
+        check_area_availability_services.push(check_area_availability_service);
 
     });
 
@@ -63,13 +63,13 @@ async function rosInit(url){
             var index_of_rosbridge_topics = arrayFunctions.findIndex(rosbridge_topics, robot_url);
             
             //Finding index of services from Array
-            var index_of_fleet_management_services = arrayFunctions.findIndex(fleet_management_services, robot_url);
+            var index_of_check_area_availability = arrayFunctions.findIndex(check_area_availability_services, robot_url);
 
             //Deleting topics from Array
             arrayFunctions.deleteElementFromArray(rosbridge_topics, index_of_rosbridge_topics);
 
             //Deleting services from Array
-            arrayFunctions.deleteElementFromArray(fleet_management_services, index_of_fleet_management_services);
+            arrayFunctions.deleteElementFromArray(check_area_availability_services, index_of_check_area_availability);
 
             setTimeout(function(){
                 rosInit(url);
