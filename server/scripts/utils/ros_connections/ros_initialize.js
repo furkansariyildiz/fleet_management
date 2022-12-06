@@ -1,7 +1,8 @@
 const ROSLIB = require('roslib');
-const rosReconnect = require('./ros_reconnect');
 const rosbridgeRosFunctions = require('../ros_bridge/ros_functions');
-const CheckAreaAvailabilityRosFunctions = require('../check_area_availability/ros_functions');
+const checkAreaAvailabilityRosFunctions = require('../check_area_availability/ros_functions');
+const speedRosFunctions = require('../speed/ros_functions');
+
 const arrayFunctions = require('../array_functions/array_functions');
 const findRobotAndUpdate = require('../robots/update_robot').findRobotAndUpdate;
 const config = require('../../../config');
@@ -12,11 +13,12 @@ config();
 //Topics
 var rosbridge_topics = [];
 var check_area_availability_topics = [];
+var speed_topics = [];
 
 //Services
 var rosbridge_services = [];
 var check_area_availability_services = [];
-
+var speed_services = [];
 
 //variables
 let ros_shutdown_condition = {};
@@ -32,22 +34,24 @@ async function rosInit(url){
         // Topics as JSON 
         var rosbridge_topic = {};
         var fleet_management_topic = {};
+        var speed_topic = {};
 
         // Services as JSON
         var rosbridge_service = {};
         var check_area_availability_service = {};
+        var speed_service = {};
 
-        // rosReconnect.rosReconnect(undefined, ros);
-        
         // Generate Topics
         rosbridge_topic[robot_url] = rosbridgeRosFunctions.generateTopics(ros);
+        speed_topic[robot_url] = speedRosFunctions.generateTopics(ros);
 
         // Generate Services
-        check_area_availability_service[robot_url] = CheckAreaAvailabilityRosFunctions.generateServices(ros);
+        check_area_availability_service[robot_url] = checkAreaAvailabilityRosFunctions.generateServices(ros);
 
         // Pushing topic to belongs topics
         rosbridge_topics.push(rosbridge_topic);
-
+        speed_topics.push(speed_topic);
+        
         // Pushing service to belongs services
         check_area_availability_services.push(check_area_availability_service);
         
@@ -60,17 +64,18 @@ async function rosInit(url){
         if(message.messageType == "rosShutdown"){
             ros_shutdown_condition[ros.socket._url] = true;
         }else if(ros_shutdown_condition[ros.socket._url] != true){
-            // rosReconnect.rosReconnect(undefined, ros);
             var robot_url = ros.socket._url;
 
             //Finding index of topics from Array
             var index_of_rosbridge_topics = arrayFunctions.findIndex(rosbridge_topics, robot_url);
-            
+            var index_of_speed_topics = arrayFunctions.findIndex(speed_topics, robot_url);
+
             //Finding index of services from Array
             var index_of_check_area_availability = arrayFunctions.findIndex(check_area_availability_services, robot_url);
 
             //Deleting topics from Array
             arrayFunctions.deleteElementFromArray(rosbridge_topics, index_of_rosbridge_topics);
+            arrayFunctions.deleteElementFromArray(speed_topics, index_of_speed_topics);
 
             //Deleting services from Array
             arrayFunctions.deleteElementFromArray(check_area_availability_services, index_of_check_area_availability);
@@ -85,7 +90,6 @@ async function rosInit(url){
 
     ros.on('error', async function(message){
         ros.close();
-        // rosReconnect.rosReconnect(undefined, ros);
     });
 
     ros.on('shutdown', async function(message){
