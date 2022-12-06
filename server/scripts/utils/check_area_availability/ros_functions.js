@@ -1,4 +1,7 @@
+const { resolve, reject } = require('bluebird');
 const ROSLIB = require('roslib');
+const checkAreaAvailability = require('./check_area_availability');
+
 
 function generateTopics(ros){
             
@@ -20,13 +23,15 @@ function generateServices(ros){
     return services;
 };
 
-function advertiseCheckAreaAvailability(client){
+async function advertiseCheckAreaAvailability(client){
     client.advertise(function(req, res){
-        console.log("Request from service: ", req);
-        res.response = "OK";
+        // res.response = checkAreaAvailability.checkAreaAvailability(req.area_availability.area_name.data);
+        res.response = "true";
         return true;
     });
+    
 };
+
 
 module.exports = {
     generateTopics: generateTopics,
