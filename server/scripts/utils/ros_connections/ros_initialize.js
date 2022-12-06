@@ -63,6 +63,7 @@ async function rosInit(url){
 
         // Update Robot Status when robot is connected with Rosbridge
         await findRobotAndUpdate({url: ros.socket._url}, {current_activity: "CONNECTED"}, {returnOriginal: false, new: true});
+        
     });
 
     ros.on('close', async function(message){
@@ -100,5 +101,6 @@ async function rosInit(url){
 
 module.exports = {
     rosInit: rosInit,
+    robot_services: robot_services,
     speed_topics: speed_topics
 };
