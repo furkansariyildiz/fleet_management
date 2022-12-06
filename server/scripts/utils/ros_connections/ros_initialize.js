@@ -98,5 +98,6 @@ async function rosInit(url){
 };
 
 module.exports = {
-    rosInit: rosInit
+    rosInit: rosInit,
+    speed_topics: speed_topics
 };
