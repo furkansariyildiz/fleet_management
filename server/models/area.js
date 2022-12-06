@@ -16,6 +16,10 @@ var areas_schema = new Schema({
         y: String,
         z: String,
         w: String
+    },
+    availability: {
+        type: Boolean,
+        default: true
     }
 }, {collection: 'areas', versionKey: false, timestamps: true});
 

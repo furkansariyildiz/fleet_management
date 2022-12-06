@@ -1,11 +1,17 @@
-const index_router = require('./index_route');
+const indexRouter = require('./index_route').indexRouter;
+const resetRobotRouter = require('./reset_robot_route').resetRobotRouter;
+
 
 module.exports.socketIORouteManager = function(io){
     io.on('connection', function(socket){
         console.log("Connected from SocketIO Module...");
 
         socket.on('message', (received_message) => {
-            index_router.indexRouter('message', received_message, io);
+            indexRouter('message', received_message, io);
+        });
+
+        socket.on('ResetRobot', (received_message) => {
+            resetRobotRouter('ResetRobot', received_message, io);
         });
     });
 };

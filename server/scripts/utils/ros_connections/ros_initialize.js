@@ -3,6 +3,7 @@ const rosReconnect = require('./ros_reconnect');
 const rosbridgeRosFunctions = require('../ros_bridge/ros_functions');
 const CheckAreaAvailabilityRosFunctions = require('../check_area_availability/ros_functions');
 const arrayFunctions = require('../array_functions/array_functions');
+const findRobotAndUpdate = require('../robots/update_robot').findRobotAndUpdate;
 const config = require('../../../config');
 
 config();
@@ -28,27 +29,30 @@ async function rosInit(url){
     ros.on('connection', async function(){
         var robot_url = ros.socket._url;
         
-        //Topics as JSON 
+        // Topics as JSON 
         var rosbridge_topic = {};
         var fleet_management_topic = {};
 
-        //Services as JSON
+        // Services as JSON
         var rosbridge_service = {};
         var check_area_availability_service = {};
 
-        rosReconnect.rosReconnect(undefined, ros);
+        // rosReconnect.rosReconnect(undefined, ros);
         
-        //Generate Topics
+        // Generate Topics
         rosbridge_topic[robot_url] = rosbridgeRosFunctions.generateTopics(ros);
 
-        //Generate Services
+        // Generate Services
         check_area_availability_service[robot_url] = CheckAreaAvailabilityRosFunctions.generateServices(ros);
 
-        //Pushing topic to belongs topics
+        // Pushing topic to belongs topics
         rosbridge_topics.push(rosbridge_topic);
 
-        //Pushing service to belongs services
+        // Pushing service to belongs services
         check_area_availability_services.push(check_area_availability_service);
+        
+        // Update Robot Status when robot is connected with Rosbridge
+        await findRobotAndUpdate({url: ros.socket._url}, {current_activity: "CONNECTED"}, {returnOriginal: false, new: true});
 
     });
 
@@ -56,7 +60,7 @@ async function rosInit(url){
         if(message.messageType == "rosShutdown"){
             ros_shutdown_condition[ros.socket._url] = true;
         }else if(ros_shutdown_condition[ros.socket._url] != true){
-            rosReconnect.rosReconnect(undefined, ros);
+            // rosReconnect.rosReconnect(undefined, ros);
             var robot_url = ros.socket._url;
 
             //Finding index of topics from Array
@@ -81,7 +85,7 @@ async function rosInit(url){
 
     ros.on('error', async function(message){
         ros.close();
-        rosReconnect.rosReconnect(undefined, ros);
+        // rosReconnect.rosReconnect(undefined, ros);
     });
 
     ros.on('shutdown', async function(message){
