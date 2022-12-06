@@ -1,4 +1,3 @@
-const { resolve, reject } = require('bluebird');
 const ROSLIB = require('roslib');
 const checkAreaAvailability = require('./check_area_availability');
 
@@ -25,7 +24,6 @@ function generateServices(ros){
 
 async function advertiseCheckAreaAvailability(client){
     client.advertise(function(req, res){
-        // res.response = checkAreaAvailability.checkAreaAvailability(req.area_availability.area_name.data);
         res.response = "true";
         return true;
     });
