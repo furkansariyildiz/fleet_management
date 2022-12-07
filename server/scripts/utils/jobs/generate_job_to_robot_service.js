@@ -1,15 +1,14 @@
 const ROSLIB = require('roslib');
 
 function generateJobToRobotService(external_reference_id, tasks, last_completed_task, client){
+    console.log(tasks);
     return new Promise((resolve, reject) => {
         var request = new ROSLIB.ServiceRequest({
             external_reference_id: external_reference_id,
-            tasks: tasks,
+            tasks: [{action_name: tasks[0].ActionName, location_id: tasks[0].LocationId}, {action_name: tasks[1].ActionName, location_id: tasks[1].LocationId}],
             last_completed_task: {
                 action_name: last_completed_task.action_name,
-                location: {
-                    id: last_completed_task.location_id
-                }
+                location_id: last_completed_task.location_id
             }
         });
 
